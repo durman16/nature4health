@@ -98,7 +98,6 @@ python-dateutil==2.8.1
 python-dotenv==0.15.0
 PyTweening==1.0.3
 pytz==2019.3
-pywin32==227
 pywinpty==0.5.7
 pyzmq==18.1.1
 qtconsole==4.6.0
