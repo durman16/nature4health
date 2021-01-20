@@ -53,6 +53,86 @@ INIT_STATEMENTS = [
                 SUGID SERIAL PRIMARY KEY,
                 SUGGESTION VARCHAR(255)
             )
+            """,
+            """
+            INSERT INTO Suggestions(SUGID, SUGGESTION)
+            SELECT 1, 'Eat a variety of foods.'
+            WHERE
+                NOT EXISTS (
+                    SELECT SUGID FROM Suggestions WHERE SUGID = 1
+                )
+            """,
+            """
+            INSERT INTO Suggestions(SUGID, SUGGESTION)
+            SELECT 2, 'Base your diet on plenty of foods rich in carbohydrates.'
+            WHERE
+                NOT EXISTS (
+                    SELECT SUGID FROM Suggestions WHERE SUGID = 2
+                )
+            """,
+            """
+            INSERT INTO Suggestions(SUGID, SUGGESTION)
+            SELECT 3, 'Replace saturated with unsaturated fat.'
+            WHERE
+                NOT EXISTS (
+                    SELECT SUGID FROM Suggestions WHERE SUGID = 3
+                )
+            """,
+            """
+            INSERT INTO Suggestions(SUGID, SUGGESTION)
+            SELECT 4, 'Enjoy plenty of fruits and vegetables.'
+            WHERE
+                NOT EXISTS (
+                    SELECT SUGID FROM Suggestions WHERE SUGID = 4
+                )
+            """,
+            """
+            INSERT INTO Suggestions(SUGID, SUGGESTION)
+            SELECT 5, 'Reduce salt and sugar intake.'
+            WHERE
+                NOT EXISTS (
+                    SELECT SUGID FROM Suggestions WHERE SUGID = 5
+                )
+            """,
+            """
+            INSERT INTO Suggestions(SUGID, SUGGESTION)
+            SELECT 6, 'Eat regularly, control the portion size.'
+            WHERE
+                NOT EXISTS (
+                    SELECT SUGID FROM Suggestions WHERE SUGID = 6
+                )
+            """,
+            """
+            INSERT INTO Suggestions(SUGID, SUGGESTION)
+            SELECT 7, 'Drink plenty of fluids.'
+            WHERE
+                NOT EXISTS (
+                    SELECT SUGID FROM Suggestions WHERE SUGID = 7
+                )
+            """,
+            """
+            INSERT INTO Suggestions(SUGID, SUGGESTION)
+            SELECT 8, 'Maintain a healthy body weight.'
+            WHERE
+                NOT EXISTS (
+                    SELECT SUGID FROM Suggestions WHERE SUGID = 8
+                )
+            """,
+            """
+            INSERT INTO Suggestions(SUGID, SUGGESTION)
+            SELECT 9, 'Get on the move, make it a habit!'
+            WHERE
+                NOT EXISTS (
+                    SELECT SUGID FROM Suggestions WHERE SUGID = 9
+                )
+            """,
+            """
+            INSERT INTO Suggestions(SUGID, SUGGESTION)
+            SELECT 10, 'Start now! And keep changing gradually.'
+            WHERE
+                NOT EXISTS (
+                    SELECT SUGID FROM Suggestions WHERE SUGID = 10
+                )
             """
             
 ]

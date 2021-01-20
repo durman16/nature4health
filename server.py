@@ -36,6 +36,7 @@ def create_app():
     app.add_url_rule("/mycure", view_func=views.mycure, methods=["GET", "POST"])
     app.add_url_rule("/likecure", view_func=views.likecure, methods=["GET", "POST"])
     app.add_url_rule("/logout", view_func=views.logout)
+    app.add_url_rule("/cure-details", view_func=views.curedetails)
 
 
 

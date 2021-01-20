@@ -130,3 +130,12 @@ def likecure():
 def logout():
     logout_user()
     return redirect(url_for("home"))
+
+def curedetails():
+    db = current_app.config["db"]
+    cures = db.get_cures()
+    return render_template(
+        'cure-details.html',
+        title='Cures',
+        cure = sorted(cures)
+    )

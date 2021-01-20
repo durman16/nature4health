@@ -73,3 +73,18 @@ class Curedb:
             cure_ = Cures(cure.title, disease=cure.disease)
             cures.append((cure_key, cure_))
         return cures
+
+
+class Suggestions:
+    def __init__(self, sugid, sug):
+        self.sugid = sugid
+        self.sug = sug
+
+class Suggestionsdb:
+    def get_sug(self):
+        sugs = []
+        for sugid, sug in self.sugs.items():
+            sug_ = Suggestions(sug.sugid, sug.sug)
+            sugs.append((sugid, sug_))
+        return sugs
+        
