@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_login import LoginManager,current_user
 
 from users import Users
@@ -7,7 +7,7 @@ import Database
 from cures import Cures
 from users import get_user
 import dbinit
-
+import forms
 import os
 
 
@@ -26,13 +26,18 @@ def create_app():
     db.add_cure(Cures("soğan suyu"))
     app.config["db"] = db
 
-    app.add_url_rule("/", view_func=views.home, methods=["GET", "POST"])
-    app.add_url_rule("/home", view_func=views.home)
+    app.add_url_rule("/", view_func=views.home)
+    app.add_url_rule("/dashboard", view_func=views.dashboard, methods=["GET", "POST"])
     app.add_url_rule("/about", view_func=views.about)
     app.add_url_rule("/cure", view_func=views.cure)
     app.add_url_rule("/cure/<int:cure_key>", view_func=views.curedetails)
     app.add_url_rule("/signup", view_func=views.signup, methods=["GET", "POST"])
     app.add_url_rule("/login", view_func=views.login, methods=["GET", "POST"])
+    app.add_url_rule("/mycure", view_func=views.mycure, methods=["GET", "POST"])
+    app.add_url_rule("/likecure", view_func=views.likecure, methods=["GET", "POST"])
+    app.add_url_rule("/logout", view_func=views.logout)
+
+
 
     SECRET_KEY = os.urandom(32)
     app.config['SECRET_KEY'] = SECRET_KEY

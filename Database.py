@@ -1,5 +1,7 @@
 import psycopg2
 
+from cures import Cures
+
 url = "host='localhost' dbname='nature4health' user='postgres' password='e6qEnjdzUy' port='5433'"
 
 #statement = "SELECT * FROM Suggestions;"
@@ -31,6 +33,16 @@ class Userdb:
             with connection.cursor() as cursor:
                 statement = """INSERT INTO Users(name,email,password) VALUES(%s,%s,%s);"""
                 cursor.execute(statement, ([name, email, password]))
+
+    def Check_existing_user(self, email):
+    	with psycopg2.connect(url) as connection:
+		    with connection.cursor() as cursor:
+			    statement = """SELECT name, password FROM users WHERE email=%s;"""
+			    cursor.execute(statement,([email]))
+			    cursor_list=cursor.fetchall()
+			    return cursor_list
+
+
 
     
 

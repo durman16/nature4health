@@ -1,30 +1,19 @@
 from datetime import datetime
 import Database
-from flask import abort, current_app, render_template, request
+from flask import abort, current_app, render_template, request, url_for, redirect, session, flash
 from passlib.hash import pbkdf2_sha256 as hasher
 from forms import LoginForm
-from flask_login import LoginManager
-
-
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from cures import Cures
+from users import get_user_2
+import forms
 
 def home():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['your_pass']
-        obje = Database.Userdb()
-        cursor = obje.Check_email(email)
-        if cursor:
-            return render_template('login.html', message='Please Sign Up before Login!')
-        if email== '' or password == '':
-            return render_template('login.html', message='Please fill up the form correctly!')
-        return render_template('index.html', title='Home Page')
-    else:
-        return render_template(
-            'index.html',
-            title='Home Page',
-            year=datetime.now().year,
-        )
+    logout_user()
+    return redirect(url_for("dashboard"))
 
+def dashboard():
+    return render_template("index.html", title="Home")
 
 
 def about():
@@ -39,7 +28,7 @@ def about():
 
 def cure():
     db = current_app.config["db"]
-    cures= db.get_cures()
+    cures = db.get_cures()
     return render_template(
         'cure.html',
         title='Cures',
@@ -60,21 +49,40 @@ def curedetails(cure_key):
 
 
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = form.data["email"]
-        user = get_user(username)
-        if user is not None:
-            password = form.data["password"]
-            if hasher.verify(password, user.password):
-                login_user(user)
-                flash("You have logged in.")
-                next_page = request.args.get("next", url_for("home_page"))
+    forms = LoginForm()
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['your_pass']
+        obje = Database.Userdb()
+        cursor = obje.Check_email(email)
+        if cursor:
+            return render_template('login.html', message='Please Sign Up before Login!')
+        if email== '' or password == '':
+            return render_template('login.html', message='Please fill up the form correctly!')
+        cursor2 = obje.Check_existing_user(email)
+        if len(cursor2) != 1:
+            return render_template('login.html', message='Email or password is wrong!')
+        else:
+            if not hasher.verify(password, cursor2[0][1]):
+                return render_template('login.html', message='Username or password is wrong!')
+            else:
+                user = get_user_2(cursor2[0][0], email, cursor2[0][1])
+                login_user(user, remember=True)
+
+                session['logged_in'] = True
+                session['user_id'] = user.email
+                
+                next_page = request.args.get("next", url_for("dashboard"))
                 return redirect(next_page)
-        flash("Invalid credentials.")
-    return render_template("login.html", form=form)
+    return render_template(
+        'login.html',
+        title='Login',
+        year=datetime.now().year,
+        forms = forms
+    )
 
 
+def signup():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -90,15 +98,6 @@ def login():
             return render_template('signup.html', message='Please enter the password correctly!')
         obje.User_Add(name, email, hasher.hash(password))
         return render_template('login.html', title='Login')
-    else:
-        return render_template(
-            'login.html',
-            title='Login',
-            year=datetime.now().year,
-        )
-
-
-def signup():
     return render_template(
         'signup.html',
         title='Sign Up',
@@ -106,3 +105,28 @@ def signup():
     )
 
 
+@login_required
+def mycure():
+    db = current_app.config["db"]
+    cures = db.get_cures()
+    return render_template(
+        'my-cures.html',
+        title='My Cures',
+        cures = sorted(cures)
+    )
+
+@login_required
+def likecure():
+    db = current_app.config["db"]
+    cures = db.get_cures()
+    return render_template(
+        'like-cures.html',
+        title='Liked Cures',
+        cures = sorted(cures)
+    )
+
+
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
