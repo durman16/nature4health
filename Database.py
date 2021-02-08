@@ -41,7 +41,18 @@ class Userdb:
 			    cursor.execute(statement,([email]))
 			    cursor_list=cursor.fetchall()
 			    return cursor_list
+    
+    def Delete_account(self, email):
+    	with psycopg2.connect(url) as connection:
+		    with connection.cursor() as cursor:
+			    statement1 = """Delete FROM users Where email=%s;"""
+			    cursor.execute(statement1,([email]))
 
+    def update(self,email, newname):
+    	with dbapi.connect(url) as connection:
+		    with connection.cursor() as cursor:
+			    statement = """Update users Set name=%s where email=%s;"""
+			    cursor.execute(statement,([newname,email]))
 
 
     

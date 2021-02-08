@@ -64,7 +64,7 @@ def login():
             return render_template('login.html', message='Email or password is wrong!')
         else:
             if not hasher.verify(password, cursor2[0][1]):
-                return render_template('login.html', message='Username or password is wrong!')
+                return render_template('login.html', message='Email or password is wrong!')
             else:
                 user = get_user_2(cursor2[0][0], email, cursor2[0][1])
                 login_user(user, remember=True)
@@ -130,6 +130,19 @@ def likecure():
 def logout():
     logout_user()
     return redirect(url_for("home"))
+
+@login_required
+def delete():
+    obje=Database.Userdb()
+    obje.Delete_account(current_user.email)
+    return redirect(url_for("home"))
+
+@login_required
+def update():
+    obje=Database.Userdb()
+    obje.update(current_user.email,"yeni")
+    return redirect(url_for("home"))
+
 
 def curedetails():
     db = current_app.config["db"]
